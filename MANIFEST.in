@@ -1,0 +1,6 @@
+include README.rst
+include LICENSE
+include requirements.txt
+recursive-include ckanext/onboarding_theodoro_bertol *.html *.json *.js *.less *.css *.mo *.yml
+recursive-include ckanext/onboarding_theodoro_bertol/migration *.ini *.py *.mako
+recursive-include ckanext/onboarding_theodoro_bertol/public *.*

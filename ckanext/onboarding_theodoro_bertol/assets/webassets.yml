@@ -1,0 +1,14 @@
+# onboarding_theodoro_bertol-js:
+#   filter: rjsmin
+#   output: ckanext-onboarding_theodoro_bertol/%(version)s-onboarding_theodoro_bertol.js
+#   contents:
+#     - js/onboarding_theodoro_bertol.js
+#   extra:
+#     preload:
+#       - base/main
+
+# onboarding_theodoro_bertol-css:
+#   filter: cssrewrite
+#   output: ckanext-onboarding_theodoro_bertol/%(version)s-onboarding_theodoro_bertol.css
+#   contents:
+#     - css/onboarding_theodoro_bertol.css
