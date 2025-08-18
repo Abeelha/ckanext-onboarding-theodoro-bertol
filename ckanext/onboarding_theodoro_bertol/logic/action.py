@@ -49,3 +49,36 @@ def user_reviewer_revoke(context, data_dict):
     
     log.info(f"Revoked reviewer permission from user: {username}")
     return {'success': True, 'user': user.name}
+
+def dataset_review(context, data_dict):
+    """Approve or reject a dataset"""
+    tk.check_access('dataset_review', context, data_dict)
+    
+    dataset_id = data_dict.get('id')
+    review_status = data_dict.get('review_status')
+    
+    if not dataset_id:
+        raise logic.ValidationError({'id': [_('Dataset ID is required')]})
+    
+    if review_status not in ['approved', 'rejected']:
+        raise logic.ValidationError({'review_status': [_('Review status must be approved or rejected')]})
+    
+    # Get the dataset
+    package_show = tk.get_action('package_show')
+    dataset = package_show(context, {'id': dataset_id})
+    
+    # Update the dataset
+    package_patch = tk.get_action('package_patch')
+    updated_data = {
+        'id': dataset_id,
+        'review_status': review_status
+    }
+    
+    # If approved, make it public
+    if review_status == 'approved':
+        updated_data['private'] = False
+    
+    result = package_patch(context, updated_data)
+    
+    log.info(f"Dataset {dataset_id} review status changed to: {review_status}")
+    return result
