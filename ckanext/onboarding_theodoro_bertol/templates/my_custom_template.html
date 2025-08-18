@@ -10,6 +10,21 @@
             <li>View variable: {{ my_var }}</li>
             <li>Helper data: {{ h.get_current_user_info().message }}</li>
             <li>Helper timestamp: {{ h.get_current_user_info().timestamp }}</li>
+            <li><strong>Current user is reviewer: {{ h.user_is_reviewer(g.user) if g.user else 'Not logged in' }}</strong></li>
         </ul>
+        
+        {% if g.user %}
+        <div class="alert alert-info">
+            <h4>User Status:</h4>
+            <p><strong>Username:</strong> {{ g.user }}</p>
+            <p><strong>Is Reviewer:</strong> 
+                {% if h.user_is_reviewer(g.user) %}
+                    <span class="label label-success">YES</span>
+                {% else %}
+                    <span class="label label-default">NO</span>
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
     </div>
 {% endblock %}
