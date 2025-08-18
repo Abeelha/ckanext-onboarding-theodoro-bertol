@@ -1,0 +1,43 @@
+{% extends "admin/base.html" %}
+
+{% block primary_content_inner %}
+  <h2>{{ _('Current Reviewers') }}</h2>
+
+  <table class="table table-header table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>{{ _('User') }}</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in reviewers %}
+        <tr>
+          <td>{{ h.linked_user(user) }}</td>
+          <td>
+            <div class="btn-group pull-right">
+              <button class="btn btn-danger btn-sm" title="{{ _('Revoke Reviewer permission') }}">
+                <i class="fa fa-times"></i> Revoke
+              </button>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr />
+
+  <h2>{{ _('Promote user to Reviewer') }}</h2>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Username:</label>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" placeholder="Enter username">
+      </div>
+      <div class="col-sm-2">
+        <button type="submit" class="btn btn-primary">{{ _('Promote') }}</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% ckan_extends %}
+
+{% block content_primary_nav %}
+  {{ h.build_nav_icon('admin.index', _('Sysadmins'), icon='gavel') }}
+  {{ h.build_nav_icon('onboarding_admin.reviewers', _('Reviewers'), icon='gavel') }}
+  {{ h.build_nav_icon('admin.config', _('Config'), icon='gear') }}
+  {{ h.build_nav_icon('admin.trash', _('Trash'), icon='trash') }}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "page.html" %}
+
+{% block primary_content %}
+    <div>
+        <h1>Dataset Review System</h1>
+        <p>Hello World from our custom template!</p>
+        <ul>
+            <li>This is our custom review system</li>
+            <li>We can write HTML in the template</li>
+            <li>View variable: {{ my_var }}</li>
+            <li>Helper data: {{ h.get_current_user_info().message }}</li>
+            <li>Helper timestamp: {{ h.get_current_user_info().timestamp }}</li>
+        </ul>
+    </div>
+{% endblock %}
