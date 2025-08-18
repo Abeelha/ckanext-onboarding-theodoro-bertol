@@ -4,6 +4,8 @@ import logging
 from ckanext.onboarding_theodoro_bertol.views.home import home
 from ckanext.onboarding_theodoro_bertol.views.admin import admin
 from ckanext.onboarding_theodoro_bertol.lib.helpers import get_helpers
+import ckanext.onboarding_theodoro_bertol.logic.action as actions
+import ckanext.onboarding_theodoro_bertol.logic.auth as auth
 
 log = logging.getLogger(__name__)
 
@@ -11,6 +13,8 @@ class OnboardingTheodoroBertolPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)
     plugins.implements(plugins.ITemplateHelpers)
+    plugins.implements(plugins.IActions)
+    plugins.implements(plugins.IAuthFunctions)
     
     # IConfigurer
     def update_config(self, config_):
@@ -29,3 +33,17 @@ class OnboardingTheodoroBertolPlugin(plugins.SingletonPlugin):
     def get_helpers(self):
         log.info("OnboardingTheodoroBertolPlugin: get_helpers called")
         return get_helpers()
+    
+    # IActions
+    def get_actions(self):
+        return {
+            'user_reviewer_grant': actions.user_reviewer_grant,
+            'user_reviewer_revoke': actions.user_reviewer_revoke,
+        }
+    
+    # IAuthFunctions
+    def get_auth_functions(self):
+        return {
+            'user_reviewer_grant': auth.user_reviewer_grant,
+            'user_reviewer_revoke': auth.user_reviewer_revoke,
+        }
