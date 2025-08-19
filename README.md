@@ -2,70 +2,114 @@
 
 # ckanext-onboarding-theodoro-bertol
 
-**TODO:** Put a description of your extension here:  What does it do? What features does it have? Consider including some screenshots or embedding a video!
+A CKAN extension that implements a dataset review workflow where new datasets require approval before becoming public. This extension provides a complete review system with reviewer management, visual status indicators, and automated privacy control.
 
+
+## Features
+
+- **Automatic Review Workflow**: New datasets are automatically set to "pending" review status and remain private
+- **Reviewer Management**: Administrators can grant/revoke reviewer permissions to users
+- **Review Actions**: Reviewers can approve or reject datasets through the web interface
+- **Visual Status Indicators**: Review status badges appear on dataset pages and listings
+- **Privacy Control**: Approved datasets automatically become public, rejected datasets remain private
 
 ## Requirements
 
-**TODO:** For example, you might want to mention here which versions of CKAN this
-extension works with.
-
-If your extension works across different versions you can add the following table:
+- CKAN 2.10+
+- Python 3.8+
 
 Compatibility with core CKAN versions:
 
 | CKAN version    | Compatible?   |
 | --------------- | ------------- |
-| 2.6 and earlier | not tested    |
-| 2.7             | not tested    |
-| 2.8             | not tested    |
+| 2.10            | yes           |
 | 2.9             | not tested    |
-
-Suggested values:
-
-* "yes"
-* "not tested" - I can't think of a reason why it wouldn't work
-* "not yet" - there is an intention to get it working
-* "no"
+| 2.8             | not tested    |
+| 2.7 and earlier | not tested    |
 
 
 ## Installation
-
-**TODO:** Add any additional install steps to the list below.
-   For example installing any non-Python dependencies or adding any required
-   config settings.
 
 To install ckanext-onboarding-theodoro-bertol:
 
 1. Activate your CKAN virtual environment, for example:
 
-     . /usr/lib/ckan/default/bin/activate
+```bash
+. /usr/lib/ckan/default/bin/activate
+```
 
 2. Clone the source and install it on the virtualenv
 
-    git clone https://github.com/Abeelha/ckanext-onboarding-theodoro-bertol.git
-    cd ckanext-onboarding-theodoro-bertol
-    pip install -e .
-	pip install -r requirements.txt
+```bash
+git clone https://github.com/Abeelha/ckanext-onboarding-theodoro-bertol.git
+cd ckanext-onboarding-theodoro-bertol
+pip install -e .
+pip install -r requirements.txt
+```
 
-3. Add `onboarding-theodoro-bertol` to the `ckan.plugins` setting in your CKAN
+3. Add `onboarding_theodoro_bertol` to the `ckan.plugins` setting in your CKAN
    config file (by default the config file is located at
    `/etc/ckan/default/ckan.ini`).
 
 4. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
 
-     sudo service apache2 reload
+```bash
+sudo service apache2 reload
+```
 
 
-## Config settings
+## Configuration
 
-None at present
+No additional configuration is required. The extension works out of the box.
 
-**TODO:** Document any optional config settings here. For example:
+## Usage
 
-	# The minimum number of hours to wait before re-checking a resource
-	# (optional, default: 24).
-	ckanext.onboarding_theodoro_bertol.some_setting = some_default_value
+### For Administrators
+
+1. **Managing Reviewers**: 
+   - Navigate to `/ckan-admin/reviewers`
+   - Grant or revoke reviewer permissions to users
+   - Sysadmins automatically have reviewer permissions
+
+### For Reviewers
+
+1. **Reviewing Datasets**:
+   - Navigate to any dataset with "pending" status
+   - Use the "Approve" or "Reject" buttons to review the dataset
+   - Approved datasets become public automatically
+   - Rejected datasets remain private and can be edited by the owner
+
+### For Dataset Creators
+
+1. **Creating Datasets**:
+   - Create datasets as normal
+   - New datasets are automatically set to "pending" review
+   - Datasets remain private until approved
+   - If rejected, edit your dataset and it will be resubmitted for review
+
+## API Actions
+
+The extension provides the following API actions:
+
+- `dataset_review`: Approve or reject a dataset (reviewers only)
+- `user_reviewer_grant`: Grant reviewer permissions to a user (sysadmins only)
+- `user_reviewer_revoke`: Revoke reviewer permissions from a user (sysadmins only)
+
+### Example API Calls
+
+```bash
+# Approve a dataset
+curl -X POST http://localhost:5000/api/3/action/dataset_review \
+  -H "Authorization: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"id": "dataset-id", "review_status": "approved"}'
+
+# Grant reviewer permission
+curl -X POST http://localhost:5000/api/3/action/user_reviewer_grant \
+  -H "Authorization: SYSADMIN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "user-id"}'
+```
 
 
 ## Developer installation
