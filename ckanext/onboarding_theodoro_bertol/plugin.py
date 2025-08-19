@@ -4,6 +4,7 @@ import logging
 from ckanext.onboarding_theodoro_bertol.views.home import home
 from ckanext.onboarding_theodoro_bertol.views.admin import admin
 from ckanext.onboarding_theodoro_bertol.views.dataset import dataset
+from ckanext.onboarding_theodoro_bertol.views.reviews import reviews
 # from ckanext.onboarding_theodoro_bertol.views.user import user
 from ckanext.onboarding_theodoro_bertol.lib.helpers import get_helpers
 import ckanext.onboarding_theodoro_bertol.logic.action as actions
@@ -70,6 +71,22 @@ class OnboardingTheodoroBertolPlugin(
             'review_status': [
                 toolkit.get_validator('ignore_missing'),
                 toolkit.get_converter('convert_to_extras'),
+            ],
+            'reviewer_id': [
+                toolkit.get_validator('ignore_missing'),
+                toolkit.get_converter('convert_to_extras'),
+            ],
+            'review_date': [
+                toolkit.get_validator('ignore_missing'),
+                toolkit.get_converter('convert_to_extras'),
+            ],
+            'last_reviewer_id': [
+                toolkit.get_validator('ignore_missing'),
+                toolkit.get_converter('convert_to_extras'),
+            ],
+            'resubmitted_after_rejection': [
+                toolkit.get_validator('ignore_missing'),
+                toolkit.get_converter('convert_to_extras'),
             ]
         })
         return schema
@@ -87,7 +104,11 @@ class OnboardingTheodoroBertolPlugin(
     def show_package_schema(self):
         schema = super().show_package_schema()
         schema.update({
-            'review_status': [toolkit.get_converter('convert_from_extras')]
+            'review_status': [toolkit.get_converter('convert_from_extras')],
+            'reviewer_id': [toolkit.get_converter('convert_from_extras')],
+            'review_date': [toolkit.get_converter('convert_from_extras')],
+            'last_reviewer_id': [toolkit.get_converter('convert_from_extras')],
+            'resubmitted_after_rejection': [toolkit.get_converter('convert_from_extras')]
         })
         return schema
 
