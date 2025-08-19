@@ -1,0 +1,82 @@
+{% ckan_extends %}
+
+{% block package_description %}
+  {% set review_status = pkg.review_status or 'pending' %}
+  {% set current_user_is_reviewer = h.user_is_reviewer(g.userobj.id if g.userobj else None) %}
+  
+  <div class="module-content">
+    <!-- Review Status Badge -->
+    <div class="review-status-container" style="margin-bottom: 20px;">
+      {% if review_status == 'approved' %}
+        <span class="label label-success" style="font-size: 14px; padding: 5px 10px;">
+          <i class="fa fa-check-circle"></i> Approved
+        </span>
+      {% elif review_status == 'rejected' %}
+        <span class="label label-danger" style="font-size: 14px; padding: 5px 10px;">
+          <i class="fa fa-times-circle"></i> Rejected
+        </span>
+      {% else %}
+        <span class="label label-warning" style="font-size: 14px; padding: 5px 10px;">
+          <i class="fa fa-clock-o"></i> Pending Review
+        </span>
+      {% endif %}
+      
+      {% if pkg.private %}
+        <span class="label label-default" style="font-size: 14px; padding: 5px 10px; margin-left: 5px;">
+          <i class="fa fa-lock"></i> Private
+        </span>
+      {% else %}
+        <span class="label label-info" style="font-size: 14px; padding: 5px 10px; margin-left: 5px;">
+          <i class="fa fa-globe"></i> Public
+        </span>
+      {% endif %}
+    </div>
+
+    <!-- Review Actions for Reviewers -->
+    {% if current_user_is_reviewer and review_status == 'pending' %}
+    <div class="review-actions alert alert-info" style="padding: 15px; margin-bottom: 20px;">
+      <h4><i class="fa fa-gavel"></i> Review Actions</h4>
+      <p>As a reviewer, you can approve or reject this dataset.</p>
+      
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <form method="POST" action="{{ url_for('onboarding_dataset.review') }}" style="display: inline;">
+          {{ h.csrf_input() if 'csrf_input' in h }}
+          <input type="hidden" name="id" value="{{ pkg.id }}" />
+          <input type="hidden" name="review_status" value="approved" />
+          <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to approve this dataset?');">
+            <i class="fa fa-check"></i> Approve Dataset
+          </button>
+        </form>
+        
+        <form method="POST" action="{{ url_for('onboarding_dataset.review') }}" style="display: inline;">
+          {{ h.csrf_input() if 'csrf_input' in h }}
+          <input type="hidden" name="id" value="{{ pkg.id }}" />
+          <input type="hidden" name="review_status" value="rejected" />
+          <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to reject this dataset?');">
+            <i class="fa fa-times"></i> Reject Dataset
+          </button>
+        </form>
+      </div>
+    </div>
+    {% elif current_user_is_reviewer and review_status != 'pending' %}
+    <div class="review-info alert alert-success" style="padding: 15px; margin-bottom: 20px;">
+      <p><i class="fa fa-info-circle"></i> This dataset has already been reviewed (Status: {{ review_status }}).</p>
+      {% if review_status == 'rejected' %}
+      <p>You can change the review status by using the review actions when the dataset is resubmitted for review.</p>
+      {% endif %}
+    </div>
+    {% endif %}
+    
+    {% if not current_user_is_reviewer and review_status == 'pending' %}
+    <div class="alert alert-warning" style="padding: 15px; margin-bottom: 20px;">
+      <p><i class="fa fa-hourglass-half"></i> This dataset is currently pending review. It will become publicly visible once approved by a reviewer.</p>
+    </div>
+    {% elif not current_user_is_reviewer and review_status == 'rejected' %}
+    <div class="alert alert-danger" style="padding: 15px; margin-bottom: 20px;">
+      <p><i class="fa fa-exclamation-triangle"></i> This dataset has been rejected. Please make the necessary changes and resubmit for review.</p>
+    </div>
+    {% endif %}
+  </div>
+
+  {{ super() }}
+{% endblock %}

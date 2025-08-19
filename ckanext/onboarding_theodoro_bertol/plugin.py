@@ -3,6 +3,7 @@ import ckan.plugins.toolkit as toolkit
 import logging
 from ckanext.onboarding_theodoro_bertol.views.home import home
 from ckanext.onboarding_theodoro_bertol.views.admin import admin
+from ckanext.onboarding_theodoro_bertol.views.dataset import dataset
 # from ckanext.onboarding_theodoro_bertol.views.user import user
 from ckanext.onboarding_theodoro_bertol.lib.helpers import get_helpers
 import ckanext.onboarding_theodoro_bertol.logic.action as actions
@@ -32,7 +33,7 @@ class OnboardingTheodoroBertolPlugin(
     # IBlueprint
     def get_blueprint(self):
         log.info("OnboardingTheodoroBertolPlugin: get_blueprint called")
-        return [home, admin]
+        return [home, admin, dataset]
     
     # ITemplateHelpers
     def get_helpers(self):

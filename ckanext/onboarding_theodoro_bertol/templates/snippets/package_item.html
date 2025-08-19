@@ -1,0 +1,31 @@
+{% ckan_extends %}
+
+{% block package_item_content %}
+  <div class="dataset-content">
+    {{ super() }}
+    
+    <!-- Add review status badge to dataset cards -->
+    {% set review_status = package.review_status or 'pending' %}
+    <div class="dataset-review-badges" style="margin-top: 10px;">
+      {% if review_status == 'approved' %}
+        <span class="label label-success">
+          <i class="fa fa-check-circle"></i> Approved
+        </span>
+      {% elif review_status == 'rejected' %}
+        <span class="label label-danger">
+          <i class="fa fa-times-circle"></i> Rejected
+        </span>
+      {% else %}
+        <span class="label label-warning">
+          <i class="fa fa-clock-o"></i> Pending
+        </span>
+      {% endif %}
+      
+      {% if package.private %}
+        <span class="label label-default">
+          <i class="fa fa-lock"></i> Private
+        </span>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
